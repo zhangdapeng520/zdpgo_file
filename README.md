@@ -36,3 +36,31 @@ func TestDirectorySize(t *testing.T){
 	fmt.Println(DirectorySize("D:\\BaiduNetdiskWorkspace\\文档"))
 }
 ```
+
+## 三、保存文件
+
+### 3.1 二维字符串切片保存为csv文件
+```go
+package main
+
+import "github.com/zhangdapeng520/zdpgo_file"
+
+func main() {
+	das := zdpgo_file.DoubleArrayString{
+		Data: [][]string{
+			{"a","b","c"},
+			{"111","222","333"},
+			{"111","222","333"},
+			{"111","222","333"},
+			{"111","222","333"},
+			{"111","222","333"},
+			{"111","222","333"},
+			{"111","222","333"},
+			{"111","222","333"},
+			{"111","222","333"},
+			{"111","222","333"},
+		},
+	}
+	das.SaveCsv("test.csv")
+}
+```
