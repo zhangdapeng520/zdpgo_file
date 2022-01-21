@@ -2,15 +2,24 @@ package zdpgo_file
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
-func TestFileExists(t *testing.T) {
-	fmt.Println(FileExists("./file.go"))
-	fmt.Println(FileExists("./file111.go"))
+func TestFile_New(t *testing.T) {
+	fileConfig := FileConfig{
+		Path: "file.go",
+	}
+	f := New(fileConfig)
+	fmt.Println(f)
+	fmt.Println(f.Name)
+	fmt.Println(f.Size)
+	fmt.Println(f.Suffix)
 }
 
-func TestFileSize(t *testing.T){
-	fmt.Println(FileSize("./file.go"))
-	fmt.Println(FileSize("./file1.go"))
+func TestDemo(t *testing.T) {
+	f := "./file.go"
+	arr := strings.Split(f, ".")
+	fmt.Println(arr)
+	fmt.Println(arr[len(arr)-1])
 }
