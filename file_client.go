@@ -43,7 +43,7 @@ func (f File) sendFile(conn net.Conn, filePath string) {
 // SendFile 向文件服务器发送文件
 // @param host 文件服务器主机地址
 // @param port 文件服务器端口号
-func (f File) SendFile(host string, port uint16) {
+func (f File) SendFile(host string, port uint16, path string, name string) {
 	// 主动发起连接请求
 	address := fmt.Sprintf("%s:%d", host, port)
 	conn, err := net.Dial("tcp", address)
@@ -54,7 +54,7 @@ func (f File) SendFile(host string, port uint16) {
 	defer conn.Close()
 
 	// 发送文件名给 接收端
-	_, err = conn.Write([]byte(f.Name))
+	_, err = conn.Write([]byte(name))
 	if err != nil {
 		f.log.Error("写入文件到conn失败：", err)
 		return
@@ -70,7 +70,7 @@ func (f File) SendFile(host string, port uint16) {
 
 	if string(buf[:n]) == "ok" {
 		// 写文件内容给服务器——借助conn
-		f.sendFile(conn, f.Path)
+		f.sendFile(conn, path)
 	}
 
 }

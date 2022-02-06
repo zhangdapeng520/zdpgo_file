@@ -6,15 +6,16 @@ import (
 	"testing"
 )
 
+func prepareFile() *File {
+	f := NewFile(FileConfig{
+		Debug: true,
+	})
+	return f
+}
+
 func TestFile_New(t *testing.T) {
-	fileConfig := FileConfig{
-		Path: "file.go",
-	}
-	f := New(fileConfig)
+	f := prepareFile()
 	fmt.Println(f)
-	fmt.Println(f.Name)
-	fmt.Println(f.Size)
-	fmt.Println(f.Suffix)
 }
 
 func TestDemo(t *testing.T) {
