@@ -19,11 +19,13 @@ func TestFile_DownloadNetImage(t *testing.T) {
 
 func TestFile_DownloadNetImageMany(t *testing.T) {
 	urls := []string{
-		"https://alifei04.cfp.cn/creative/vcg/nowarter800/new/VCG41N695593548.jpg",
-		"https://tenfei02.cfp.cn/creative/vcg/nowarter800/new/VCG41N1014325904.jpg",
-		"https://tenfei05.cfp.cn/creative/vcg/nowater800/new/VCG41545444880.jpg",
+		//"https://alifei04.cfp.cn/creative/vcg/nowarter800/new/VCG41N695593548.jpg",
+		//"https://tenfei02.cfp.cn/creative/vcg/nowarter800/new/VCG41N1014325904.jpg",
+		//"https://tenfei05.cfp.cn/creative/vcg/nowater800/new/VCG41545444880.jpg",
+		"https://doc.lagout.org/security/openssl-cookbook.pdf",
 	}
 	f := prepareFile()
-	savePath := "D:\\data\\image\\spider"
+	//savePath := "D:\\data\\image\\spider"
+	savePath := "D:\\data\\pdf"
 	f.DownloadNetImageMany(savePath, urls)
 }
