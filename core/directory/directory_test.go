@@ -1,21 +1,25 @@
-package zdpgo_file
+package directory
 
 import (
 	"fmt"
 	"testing"
 )
 
+func getDirectory() *Directory {
+	return New()
+}
+
 func TestDirectorySize(t *testing.T) {
-	f := prepareFile()
-	fmt.Println(f.GetDirectorySize("D:\\BaiduNetdiskWorkspace\\文档"))
+	f := getDirectory()
+	fmt.Println(f.GetDirectorySize("../download"))
 }
 
 func TestFile_IsExist(t *testing.T) {
-	f := prepareFile()
+	f := getDirectory()
 	fmt.Println(f.IsExist("D:\\BaiduNetdiskWorkspace\\文档"))
 }
 
 func TestFile_CreateMultiDir(t *testing.T) {
-	f := prepareFile()
+	f := getDirectory()
 	fmt.Println(f.CreateMultiDir("logs/zdpgo"))
 }

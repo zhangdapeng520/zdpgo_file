@@ -1,12 +1,12 @@
-package zdpgo_file
+package main
 
 import (
 	"fmt"
-	"testing"
+	"github.com/zhangdapeng520/zdpgo_file"
 )
 
-func TestFile_CsvSave(t *testing.T) {
-	f := prepareFile()
+func main() {
+	f := zdpgo_file.New()
 	data := [][]string{
 		{"a", "b", "c"},
 		{"111", "222", "333"},
@@ -20,11 +20,14 @@ func TestFile_CsvSave(t *testing.T) {
 		{"111", "222", "333"},
 		{"111", "222", "333"},
 	}
-	f.CsvSave("test.csv", data)
-}
 
-func TestFile_CsvRead(t *testing.T) {
-	f := prepareFile()
-	data, err := f.CsvRead("test.csv")
-	fmt.Println(data, err)
+	// 写入
+	f.Csv.Write("test.csv", data)
+
+	// 读取
+	dataNew, err := f.Csv.Read("test.csv")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(dataNew)
 }

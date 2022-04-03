@@ -1,4 +1,4 @@
-package zdpgo_file
+package csv
 
 import (
 	"bufio"
@@ -12,25 +12,26 @@ var (
 	rw = new(sync.RWMutex) // 读写互斥锁
 )
 
-// CsvSave 将数据保存为csv文件
-func (f *File) CsvSave(filePath string, data [][]string) bool {
+type Csv struct {
+}
+
+func New() *Csv {
+	c := Csv{}
+	return &c
+}
+
+// Write 将数据保存为csv文件
+func (f *Csv) Write(filePath string, data [][]string) (err error) {
 	fileHandler, err := os.Create(filePath)
+	defer fileHandler.Close()
 	if err != nil {
-		f.log.Error("创建csv文件失败", "error", err)
-		return false
+		return err
 	}
-	defer func(fileHandler *os.File) {
-		err := fileHandler.Close()
-		if err != nil {
-			f.log.Error("关闭文件失败", "error", err.Error())
-		}
-	}(fileHandler)
 
 	// 写入UTF-8 BOM
 	_, err = fileHandler.WriteString("\xEF\xBB\xBF")
 	if err != nil {
-		f.log.Error("写入UTF-8失败", "error", err.Error())
-		return false
+		return err
 	}
 
 	// 创建一个新的写入文件流
@@ -40,17 +41,16 @@ func (f *File) CsvSave(filePath string, data [][]string) bool {
 	rw.Lock()
 	err = w.WriteAll(data)
 	if err != nil {
-		f.log.Error("写入所有数据失败", "error", err.Error())
-		return false
+		return err
 	}
 	w.Flush()
 	rw.Unlock()
 
-	return true
+	return nil
 }
 
-// CsvRead 读取csv
-func (f *File) CsvRead(fileName string) (data [][]string, err error) {
+// Read 读取csv
+func (f *Csv) Read(fileName string) (data [][]string, err error) {
 	// 打开文件
 	csvFile, _ := os.Open(fileName)
 
@@ -66,7 +66,6 @@ func (f *File) CsvRead(fileName string) (data [][]string, err error) {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			f.log.Error("读取csv失败", "error", err.Error())
 			return nil, err
 		}
 
