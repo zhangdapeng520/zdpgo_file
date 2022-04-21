@@ -6,6 +6,7 @@ Golang操作文件或者文件夹的快捷组件
 ## 版本历史
 - 2022年2月7日：版本0.1.0
 - 2022年4月3日：版本0.1.1 项目结构优化
+- 2022年4月21日：版本0.1.2 新增：去掉文件夹中所有文件的后缀
 
 ## 使用示例
 ### 读写csv
@@ -94,7 +95,7 @@ func main() {
 }
 ```
 
-## 文件操作
+### 文件操作
 ```go
 package main
 
@@ -110,5 +111,22 @@ func main() {
 
 	fmt.Println(f.File.Size("./file.go"))
 	fmt.Println(f.File.Size("./file1.go"))
+}
+```
+
+### 去掉文件后缀
+```go
+package main
+
+import (
+	"github.com/zhangdapeng520/zdpgo_file"
+)
+
+func main() {
+	f := zdpgo_file.New()
+	err := f.File.RemoveDirFilesSuffix("test")
+	if err != nil {
+		panic(err)
+	}
 }
 ```

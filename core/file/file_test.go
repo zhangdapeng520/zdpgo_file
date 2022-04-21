@@ -20,3 +20,11 @@ func TestFileSize(t *testing.T) {
 	fmt.Println(f.Size("./file.go"))
 	fmt.Println(f.Size("./file1.go"))
 }
+
+func TestFile_RemoveDirFilesSuffix(t *testing.T) {
+	f := getFile()
+	err := f.RemoveDirFilesSuffix("./test")
+	if err != nil {
+		t.Error(err)
+	}
+}
