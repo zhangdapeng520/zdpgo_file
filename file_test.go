@@ -9,69 +9,30 @@ func getFile() *File {
 	return New()
 }
 
-func TestFile_csv(t *testing.T) {
+func TestFileExists(t *testing.T) {
 	f := getFile()
-	data := [][]string{
-		{"a", "b", "c"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-		{"111", "222", "333"},
-	}
+	fmt.Println(f.Exists("./file.go"))
+	fmt.Println(f.Exists("./file111.go"))
+}
 
-	// 写入
-	f.Csv.Write("test.csv", data)
+func TestFileSize(t *testing.T) {
+	f := getFile()
+	fmt.Println(f.Size("./file.go"))
+	fmt.Println(f.Size("./file1.go"))
+}
 
-	// 读取
-	dataNew, err := f.Csv.Read("test.csv")
+func TestFile_RemoveDirFilesSuffix(t *testing.T) {
+	f := getFile()
+	err := f.RemoveDirFilesSuffix("./test")
 	if err != nil {
-		fmt.Println(err)
+		t.Error(err)
 	}
-	fmt.Println(dataNew)
-
 }
 
-func TestFile_directory(t *testing.T) {
+func TestFile_RenameDirFilesName(t *testing.T) {
 	f := getFile()
-	fmt.Println(f.Directory.GetDirectorySize("../download"))
-	fmt.Println(f.Directory.IsExist("D:\\BaiduNetdiskWorkspace\\文档"))
-	fmt.Println(f.Directory.CreateMultiDir("logs/zdpgo"))
-}
-
-func TestFile_download(t *testing.T) {
-
-	f := getFile()
-	savePath := "./"
-
-	// 单个下载
-	url := "https://avatar.csdnimg.cn/2/9/0/1_togolife.jpg"
-	err := f.Download.Download(savePath, url)
+	err := f.ReplaceDirFilesName("./test", "[test]", "")
 	if err != nil {
-		fmt.Println("下载失败：", err)
-	} else {
-		fmt.Println("下载成功")
+		t.Error(err)
 	}
-
-	// 批量下载
-	urls := []string{
-		"https://alifei04.cfp.cn/creative/vcg/nowarter800/new/VCG41N695593548.jpg",
-		"https://tenfei02.cfp.cn/creative/vcg/nowarter800/new/VCG41N1014325904.jpg",
-		"https://tenfei05.cfp.cn/creative/vcg/nowater800/new/VCG41545444880.jpg",
-	}
-	f.Download.Downloads(savePath, urls)
-}
-
-func TestFile_file(t *testing.T) {
-	f := getFile()
-	fmt.Println(f.File.Exists("./file.go"))
-	fmt.Println(f.File.Exists("./file111.go"))
-
-	fmt.Println(f.File.Size("./file.go"))
-	fmt.Println(f.File.Size("./file1.go"))
 }

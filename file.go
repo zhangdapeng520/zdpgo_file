@@ -1,30 +1,112 @@
 package zdpgo_file
 
 import (
-	"github.com/zhangdapeng520/zdpgo_file/core/csv"
-	"github.com/zhangdapeng520/zdpgo_file/core/directory"
-	"github.com/zhangdapeng520/zdpgo_file/core/download"
-	"github.com/zhangdapeng520/zdpgo_file/core/file"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path"
+	"strings"
+	"sync"
 )
 
 // File 文件对象
 type File struct {
-	Csv       *csv.Csv             // CSV处理对象
-	File      *file.File           // File文件处理对象
-	Directory *directory.Directory // 文件夹处理对象
-	Download  *download.Download   // 下载对象
+	lock sync.Mutex
 }
 
 // New 新建文件对象
 func New() *File {
 
 	f := File{}
-
-	// 初始化操作对象
-	f.Csv = csv.New()
-	f.Directory = directory.New()
-	f.File = file.New()
-	f.Download = download.New()
-
 	return &f
+}
+
+// Exists 判断文件是否存在
+func (f *File) Exists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil || os.IsExist(err)
+}
+
+// Size 获取文件大小
+func (f *File) Size(path string) int64 {
+	if !f.Exists(path) {
+		return 0
+	}
+	fileInfo, err := os.Stat(path)
+	if err != nil {
+		return 0
+	}
+	return fileInfo.Size()
+}
+
+func (f *File) Rename() {
+	dir := "static"
+	files, _ := ioutil.ReadDir(dir)
+	for _, file := range files {
+		fileName := file.Name()
+		newName := strings.Split(fileName, ".")[0]
+
+		fileName = path.Join(dir, fileName)
+		newName = path.Join(dir, newName)
+
+		fmt.Println("正在修改文件：", fileName, newName)
+		err := os.Rename(fileName, newName)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+// RemoveDirFilesSuffix 去掉指定目录下所有文件的后缀
+func (f *File) RemoveDirFilesSuffix(dirPath string) error {
+	// 读取文件夹
+	files, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		return err
+	}
+
+	// 遍历修改文件
+	for _, file := range files {
+		// 获取文件名
+		fileName := file.Name()
+		newName := strings.Split(fileName, ".")[0]
+
+		// 拼接文件夹
+		fileName = path.Join(dirPath, fileName)
+		newName = path.Join(dirPath, newName)
+
+		// 重命名
+		err := os.Rename(fileName, newName)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// ReplaceDirFilesName 替换指定目录下的文件名
+func (f *File) ReplaceDirFilesName(dirPath string, oldStr, newStr string) error {
+	// 读取文件夹
+	files, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		return err
+	}
+
+	// 遍历修改文件
+	for _, file := range files {
+		// 获取文件名
+		fileName := file.Name()
+		newName := strings.Replace(fileName, oldStr, newStr, 1)
+
+		// 拼接文件夹
+		fileName = path.Join(dirPath, fileName)
+		newName = path.Join(dirPath, newName)
+
+		// 重命名
+		err = os.Rename(fileName, newName)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

@@ -1,27 +1,14 @@
-package csv
+package zdpgo_file
 
 import (
 	"bufio"
 	"encoding/csv"
 	"io"
 	"os"
-	"sync"
 )
-
-var (
-	rw = new(sync.RWMutex) // 读写互斥锁
-)
-
-type Csv struct {
-}
-
-func New() *Csv {
-	c := Csv{}
-	return &c
-}
 
 // Write 将数据保存为csv文件
-func (f *Csv) Write(filePath string, data [][]string) (err error) {
+func (f *File) WriteCsv(filePath string, data [][]string) (err error) {
 	fileHandler, err := os.Create(filePath)
 	defer fileHandler.Close()
 	if err != nil {
@@ -38,19 +25,19 @@ func (f *Csv) Write(filePath string, data [][]string) (err error) {
 	w := csv.NewWriter(fileHandler)
 
 	// 使其同步，保证线程安全
-	rw.Lock()
+	f.lock.Lock()
 	err = w.WriteAll(data)
 	if err != nil {
 		return err
 	}
 	w.Flush()
-	rw.Unlock()
+	f.lock.Unlock()
 
 	return nil
 }
 
 // Read 读取csv
-func (f *Csv) Read(fileName string) (data [][]string, err error) {
+func (f *File) ReadCsv(fileName string) (data [][]string, err error) {
 	// 打开文件
 	csvFile, _ := os.Open(fileName)
 

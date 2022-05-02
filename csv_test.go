@@ -1,17 +1,14 @@
-package csv
+package zdpgo_file
 
 import (
 	"fmt"
 	"testing"
 )
 
-func getCsv() *Csv {
-	return New()
-}
 func TestFile_CsvSave(t *testing.T) {
-	f := getCsv()
+	f := getFile()
 	data := [][]string{
-		{"a", "b", "c"},
+		{"a[test]", "b", "c[test]"},
 		{"111", "222", "333"},
 		{"111", "222", "333"},
 		{"111", "222", "333"},
@@ -23,11 +20,11 @@ func TestFile_CsvSave(t *testing.T) {
 		{"111", "222", "333"},
 		{"111", "222", "333"},
 	}
-	f.Write("test.csv", data)
+	f.WriteCsv("test.csv", data)
 }
 
 func TestFile_CsvRead(t *testing.T) {
-	f := getCsv()
-	data, err := f.Read("test.csv")
+	f := getFile()
+	data, err := f.ReadCsv("test.csv")
 	fmt.Println(data, err)
 }

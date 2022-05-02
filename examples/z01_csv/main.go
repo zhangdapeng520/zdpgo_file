@@ -8,7 +8,7 @@ import (
 func main() {
 	f := zdpgo_file.New()
 	data := [][]string{
-		{"a", "b", "c"},
+		{"a[test]", "b", "c[test]"},
 		{"111", "222", "333"},
 		{"111", "222", "333"},
 		{"111", "222", "333"},
