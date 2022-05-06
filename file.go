@@ -110,3 +110,20 @@ func (f *File) ReplaceDirFilesName(dirPath string, oldStr, newStr string) error 
 	}
 	return nil
 }
+
+// Copy 复制文件
+// @param src 源文件地址
+// @param dest 目标文件地址
+func (f *File) Copy(src, dest string) error {
+	// 读取文件夹
+	srcFile, err := ioutil.ReadFile(src)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(dest, srcFile, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
