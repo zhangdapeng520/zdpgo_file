@@ -6,7 +6,7 @@
 **/*.log
 **/tmp
 **/temp
-**/test
 **/*.csv
 **/*.jpg
 **/*.xlsx
+**/test*

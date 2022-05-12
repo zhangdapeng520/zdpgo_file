@@ -1,6 +1,10 @@
 package zdpgo_file
 
-import "os"
+import (
+	"io/ioutil"
+	"os"
+	"path/filepath"
+)
 
 /*
 @Time : 2022/5/12 14:49
@@ -11,13 +15,45 @@ import "os"
 */
 
 // CreateMultiDir 调用os.MkdirAll递归创建文件夹
-func (f *File) CreateMultiDir(filePath string) error {
-	if !f.IsExists(filePath) {
-		err := os.MkdirAll(filePath, os.ModePerm)
+func (f *File) CreateMultiDir(dirtPath string) bool {
+	if !f.IsExists(dirtPath) {
+		err := os.MkdirAll(dirtPath, os.ModePerm)
 		if err != nil {
-			return err
+			f.Log.Error("创建文件夹失败", "error", err, "dirPath", dirtPath)
+			return false
 		}
-		return err
+		return true
 	}
-	return nil
+	return false
+}
+
+// CreateDirFile 在指定文件夹中创建文件
+func (f *File) CreateDirFile(dirtPath, fileName, content string) bool {
+	// 文件夹不存在
+	if !f.IsExists(dirtPath) {
+		f.Log.Error("要创建文件的指定文件夹不存在", "dirPath", dirtPath)
+		return false
+	}
+
+	// 拼接文件路径
+	filePath := filepath.Join(dirtPath, fileName)
+
+	// 写入数据
+	err := ioutil.WriteFile(filePath, []byte(content), os.ModePerm)
+	if err != nil {
+		f.Log.Error("写入数据到文件失败", "error", err, "filePath", filePath)
+		return false
+	}
+
+	return true
+}
+
+// CreateFile 创建文件
+func (f *File) CreateFile(filePath, content string) bool {
+	err := ioutil.WriteFile(filePath, []byte(content), os.ModePerm)
+	if err != nil {
+		f.Log.Error("写入数据到文件失败", "error", err, "filePath", filePath)
+		return false
+	}
+	return true
 }

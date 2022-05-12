@@ -6,7 +6,9 @@ import (
 )
 
 func getFile() *File {
-	return New()
+	return NewWithConfig(Config{
+		Debug: true,
+	})
 }
 
 func TestFile_IsExists(t *testing.T) {

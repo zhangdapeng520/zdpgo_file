@@ -32,3 +32,22 @@ func TestFile_DeleteDirFile(t *testing.T) {
 		}
 	}
 }
+
+// 测试删除文件夹
+func TestFile_DeleteDir(t *testing.T) {
+	f := getFile()
+	data := []struct {
+		DirPath string
+		Status  bool
+	}{
+		{"test", true},
+		{"test1", false},
+	}
+
+	for _, d := range data {
+		b := f.DeleteDir(d.DirPath)
+		if b != d.Status {
+			panic("测试失败：不是预期的结果")
+		}
+	}
+}

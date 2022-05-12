@@ -42,3 +42,18 @@ func (f *File) IsDirContainsFile(dirPath, fileName string) bool {
 
 	return false
 }
+
+// IsDir 判断所给路径是否为文件夹
+func (f *File) IsDir(dirPath string) bool {
+	s, err := os.Stat(dirPath)
+	if err != nil {
+		f.Log.Error("打开文件失败", "error", err)
+		return false
+	}
+	return s.IsDir()
+}
+
+// IsFile 判断所给路径是否为文件
+func (f *File) IsFile(path string) bool {
+	return !f.IsDir(path)
+}

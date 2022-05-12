@@ -26,3 +26,13 @@ func (f *File) DeleteDirFile(dirPath, fileName string) bool {
 	}
 	return true
 }
+
+// DeleteDir 删除文件夹
+func (f *File) DeleteDir(dirPath string) bool {
+	err := os.RemoveAll(dirPath)
+	if err != nil {
+		f.Log.Error("删除文件夹失败", "error", err, "dirPath", dirPath)
+		return false
+	}
+	return true
+}
