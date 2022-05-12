@@ -47,12 +47,6 @@ func NewWithConfig(config Config) *File {
 	return &f
 }
 
-// IsExists 判断文件是否存在
-func (f *File) IsExists(path string) bool {
-	_, err := os.Stat(path)
-	return err == nil || os.IsExist(err)
-}
-
 // Size 获取文件大小
 func (f *File) Size(path string) int64 {
 	if !f.IsExists(path) {
@@ -134,22 +128,5 @@ func (f *File) ReplaceDirFilesName(dirPath string, oldStr, newStr string) error 
 			return err
 		}
 	}
-	return nil
-}
-
-// Copy 复制文件
-// @param src 源文件地址
-// @param dest 目标文件地址
-func (f *File) Copy(src, dest string) error {
-	// 读取文件夹
-	srcFile, err := ioutil.ReadFile(src)
-	if err != nil {
-		return err
-	}
-	err = ioutil.WriteFile(dest, srcFile, 0644)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }

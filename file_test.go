@@ -36,22 +36,3 @@ func TestFile_RenameDirFilesName(t *testing.T) {
 		t.Error(err)
 	}
 }
-
-func TestFile_Copy(t *testing.T) {
-	f := getFile()
-	testData := []struct {
-		Src  string
-		Dest string
-	}{
-		{"test/test1.txt", "test/test11.txt"},
-		{"test/test2.txt", "test/test22.txt"},
-		{"test/test3.txt", "test/test33.txt"},
-	}
-
-	for _, data := range testData {
-		err := f.Copy(data.Src, data.Dest)
-		if err != nil {
-			panic(err)
-		}
-	}
-}

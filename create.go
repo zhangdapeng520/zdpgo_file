@@ -12,7 +12,7 @@ import "os"
 
 // CreateMultiDir 调用os.MkdirAll递归创建文件夹
 func (f *File) CreateMultiDir(filePath string) error {
-	if !f.IsExist(filePath) {
+	if !f.IsExists(filePath) {
 		err := os.MkdirAll(filePath, os.ModePerm)
 		if err != nil {
 			return err
