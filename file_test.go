@@ -9,13 +9,13 @@ func getFile() *File {
 	return New()
 }
 
-func TestFileExists(t *testing.T) {
+func TestFile_IsExists(t *testing.T) {
 	f := getFile()
-	fmt.Println(f.Exists("./file.go"))
-	fmt.Println(f.Exists("./file111.go"))
+	fmt.Println(f.IsExists("./file.go"))
+	fmt.Println(f.IsExists("./file111.go"))
 }
 
-func TestFileSize(t *testing.T) {
+func TestFile_Size(t *testing.T) {
 	f := getFile()
 	fmt.Println(f.Size("./file.go"))
 	fmt.Println(f.Size("./file1.go"))

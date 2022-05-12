@@ -2,6 +2,7 @@ package zdpgo_file
 
 import (
 	"fmt"
+	"github.com/zhangdapeng520/zdpgo_log"
 	"io/ioutil"
 	"os"
 	"path"
@@ -11,25 +12,50 @@ import (
 
 // File 文件对象
 type File struct {
-	lock sync.Mutex
+	sync.Mutex                // 同步锁
+	Log        *zdpgo_log.Log // 日志
+	Config     *Config        // 配置对象
 }
 
 // New 新建文件对象
 func New() *File {
+	return NewWithConfig(Config{})
+}
 
+// NewWithConfig 使用配置创建File对象
+func NewWithConfig(config Config) *File {
 	f := File{}
+
+	// 日志
+	if config.LogFilePath == "" {
+		config.LogFilePath = "logs/zdpgo/zdpgo_file.log"
+	}
+	logConfig := zdpgo_log.Config{
+		Debug:       config.Debug,
+		OpenJsonLog: true,
+		LogFilePath: config.LogFilePath,
+	}
+	if config.Debug {
+		logConfig.IsShowConsole = true
+	}
+	f.Log = zdpgo_log.NewWithConfig(logConfig)
+
+	// 配置
+	f.Config = &config
+
+	// 返回对象
 	return &f
 }
 
-// Exists 判断文件是否存在
-func (f *File) Exists(path string) bool {
+// IsExists 判断文件是否存在
+func (f *File) IsExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
 }
 
 // Size 获取文件大小
 func (f *File) Size(path string) int64 {
-	if !f.Exists(path) {
+	if !f.IsExists(path) {
 		return 0
 	}
 	fileInfo, err := os.Stat(path)
