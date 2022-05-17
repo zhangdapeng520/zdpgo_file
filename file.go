@@ -30,15 +30,7 @@ func NewWithConfig(config Config) *File {
 	if config.LogFilePath == "" {
 		config.LogFilePath = "logs/zdpgo/zdpgo_file.log"
 	}
-	logConfig := zdpgo_log.Config{
-		Debug:       config.Debug,
-		OpenJsonLog: true,
-		LogFilePath: config.LogFilePath,
-	}
-	if config.Debug {
-		logConfig.IsShowConsole = true
-	}
-	f.Log = zdpgo_log.NewWithConfig(logConfig)
+	f.Log = zdpgo_log.NewWithDebug(config.Debug, config.LogFilePath)
 
 	// 配置
 	f.Config = &config
