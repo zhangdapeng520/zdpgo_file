@@ -14,25 +14,23 @@ import (
 @Description: 创建相关的方法
 */
 
-// CreateMultiDir 调用os.MkdirAll递归创建文件夹
-func (f *File) CreateMultiDir(dirtPath string) bool {
+// CreateDir 调用os.MkdirAll递归创建文件夹
+func (f *File) CreateDir(dirtPath string) bool {
 	if !f.IsExists(dirtPath) {
 		err := os.MkdirAll(dirtPath, os.ModePerm)
 		if err != nil {
 			f.Log.Error("创建文件夹失败", "error", err, "dirPath", dirtPath)
 			return false
 		}
-		return true
 	}
-	return false
+	return true
 }
 
 // CreateDirFile 在指定文件夹中创建文件
 func (f *File) CreateDirFile(dirtPath, fileName, content string) bool {
 	// 文件夹不存在
 	if !f.IsExists(dirtPath) {
-		f.Log.Error("要创建文件的指定文件夹不存在", "dirPath", dirtPath)
-		return false
+		f.CreateDir(dirtPath)
 	}
 
 	// 拼接文件路径
@@ -50,6 +48,13 @@ func (f *File) CreateDirFile(dirtPath, fileName, content string) bool {
 
 // CreateFile 创建文件
 func (f *File) CreateFile(filePath, content string) bool {
+	// 创建文件夹
+	dirPath := f.GetFileDir(filePath)
+	if !f.IsExists(dirPath) {
+		f.CreateDir(dirPath)
+	}
+
+	// 创建文件
 	err := ioutil.WriteFile(filePath, []byte(content), os.ModePerm)
 	if err != nil {
 		f.Log.Error("写入数据到文件失败", "error", err, "filePath", filePath)

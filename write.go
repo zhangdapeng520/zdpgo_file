@@ -14,17 +14,19 @@ import (
 */
 
 // WriteCsv 将数据保存为csv文件
-func (f *File) WriteCsv(filePath string, data [][]string) (err error) {
+func (f *File) WriteCsv(filePath string, data [][]string) bool {
 	fileHandler, err := os.Create(filePath)
 	defer fileHandler.Close()
 	if err != nil {
-		return err
+		f.Log.Error("创建CSV文件失败", "error", err)
+		return false
 	}
 
 	// 写入UTF-8 BOM
 	_, err = fileHandler.WriteString("\xEF\xBB\xBF")
 	if err != nil {
-		return err
+		f.Log.Error("写入字符集失败", "error", err)
+		return false
 	}
 
 	// 创建一个新的写入文件流
@@ -34,10 +36,11 @@ func (f *File) WriteCsv(filePath string, data [][]string) (err error) {
 	f.Lock()
 	err = w.WriteAll(data)
 	if err != nil {
-		return err
+		f.Log.Error("写入CSV数据失败", "error", err)
+		return false
 	}
 	w.Flush()
 	f.Unlock()
 
-	return nil
+	return true
 }

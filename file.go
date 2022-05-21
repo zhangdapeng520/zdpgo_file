@@ -1,7 +1,6 @@
 package zdpgo_file
 
 import (
-	"fmt"
 	"github.com/zhangdapeng520/zdpgo_log"
 	"io/ioutil"
 	"os"
@@ -39,43 +38,27 @@ func NewWithConfig(config Config) *File {
 	return &f
 }
 
-// Size 获取文件大小
-func (f *File) Size(path string) int64 {
+// GetFileSize 获取文件大小
+func (f *File) GetFileSize(path string) int64 {
 	if !f.IsExists(path) {
+		f.Log.Debug("文件不存在", "path", path)
 		return 0
 	}
 	fileInfo, err := os.Stat(path)
 	if err != nil {
+		f.Log.Error("获取文件信息失败", "error", err, "path", path)
 		return 0
 	}
 	return fileInfo.Size()
 }
 
-func (f *File) Rename() {
-	dir := "static"
-	files, _ := ioutil.ReadDir(dir)
-	for _, file := range files {
-		fileName := file.Name()
-		newName := strings.Split(fileName, ".")[0]
-
-		fileName = path.Join(dir, fileName)
-		newName = path.Join(dir, newName)
-
-		fmt.Println("正在修改文件：", fileName, newName)
-		err := os.Rename(fileName, newName)
-		if err != nil {
-			panic(err)
-		}
-	}
-}
-
 // RemoveDirFilesSuffix 去掉指定目录下所有文件的后缀
-func (f *File) RemoveDirFilesSuffix(dirPath string) error {
+func (f *File) RemoveDirFilesSuffix(dirPath string) bool {
 	// 读取文件夹
 	files, err := ioutil.ReadDir(dirPath)
 	if err != nil {
 		f.Log.Error("读取文件夹失败", "error", err, "dirPath", dirPath)
-		return err
+		return false
 	}
 
 	// 遍历修改文件
@@ -89,11 +72,7 @@ func (f *File) RemoveDirFilesSuffix(dirPath string) error {
 
 		// 如果是文件夹，递归移除
 		if f.IsDir(fileName) {
-			err = f.RemoveDirFilesSuffix(fileName)
-			if err != nil {
-				f.Log.Error("递归移除文件夹后缀失败", "error", err, "fileName", fileName)
-				return err
-			}
+			f.RemoveDirFilesSuffix(fileName)
 			continue
 		}
 
@@ -109,20 +88,21 @@ func (f *File) RemoveDirFilesSuffix(dirPath string) error {
 		err = os.Rename(fileName, newName)
 		if err != nil {
 			f.Log.Error("重命名文件失败", "error", err, "fileName", fileName, "newName", newName)
-			return err
+			return false
 		}
 
 		f.Log.Debug("移除文件后缀成功", "fileName", fileName, "newName", newName)
 	}
-	return nil
+	return true
 }
 
 // ReplaceDirFilesName 替换指定目录下的文件名
-func (f *File) ReplaceDirFilesName(dirPath string, oldStr, newStr string) error {
+func (f *File) ReplaceDirFilesName(dirPath string, oldStr, newStr string) bool {
 	// 读取文件夹
 	files, err := ioutil.ReadDir(dirPath)
 	if err != nil {
-		return err
+		f.Log.Error("读取文件夹失败", "error", err, "dirPath", dirPath)
+		return false
 	}
 
 	// 遍历修改文件
@@ -133,13 +113,27 @@ func (f *File) ReplaceDirFilesName(dirPath string, oldStr, newStr string) error 
 
 		// 拼接文件夹
 		fileName = path.Join(dirPath, fileName)
-		newName = path.Join(dirPath, newName)
+
+		// 如果是文件夹，递归的重命名
+		if f.IsDir(fileName) {
+			f.ReplaceDirFilesName(fileName, oldStr, newStr)
+			continue
+		}
+
+		// 不包含要替换的字符串，跳过
+		if !strings.Contains(fileName, oldStr) {
+			f.Log.Debug("不包含要替换的字符串，跳过", "fileName", fileName, "oldStr", oldStr)
+			continue
+		}
 
 		// 重命名
+		newName = path.Join(dirPath, newName)
 		err = os.Rename(fileName, newName)
 		if err != nil {
-			return err
+			f.Log.Error("重命名文件失败", "error", err)
+			return false
 		}
+		f.Log.Debug("重命名文件成功", "fileName", fileName, "newName", newName)
 	}
-	return nil
+	return true
 }

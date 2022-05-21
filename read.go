@@ -18,11 +18,15 @@ import (
 // ReadCsv 读取csv
 func (f *File) ReadCsv(fileName string) (data [][]string, err error) {
 	// 打开文件
-	csvFile, _ := os.Open(fileName)
+	csvFile, err := os.Open(fileName)
+	if err != nil {
+		f.Log.Error("打开CSV文件失败", "error", err)
+		return
+	}
+	defer csvFile.Close()
 
 	// 读取文件
 	reader := csv.NewReader(bufio.NewReader(csvFile))
-
 	for {
 		// 读取一行
 		var line []string
@@ -32,7 +36,8 @@ func (f *File) ReadCsv(fileName string) (data [][]string, err error) {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			return nil, err
+			f.Log.Error("读取CSV文件失败", "error", err)
+			return
 		}
 
 		// 追加数据

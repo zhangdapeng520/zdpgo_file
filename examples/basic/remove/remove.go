@@ -11,8 +11,6 @@ import "github.com/zhangdapeng520/zdpgo_file"
 */
 
 func RemoveSuffix(f *zdpgo_file.File) {
-	err := f.RemoveDirFilesSuffix("test")
-	if err != nil {
-		panic(err)
-	}
+	b := f.RemoveDirFilesSuffix("test")
+	f.Log.Debug("移除文件夹中所有文件的后缀", "dir", "test", "result", b)
 }

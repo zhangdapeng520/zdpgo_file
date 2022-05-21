@@ -13,20 +13,26 @@ import "io/ioutil"
 // CopyFile 复制文件
 // @param src 源文件地址
 // @param dest 目标文件地址
-func (f *File) CopyFile(src, dest string) error {
+func (f *File) CopyFile(src, dest string) bool {
 	// 读取源文件
 	srcFile, err := ioutil.ReadFile(src)
 	if err != nil {
 		f.Log.Error("读取源文件失败", "error", err, "src", src)
-		return err
+		return false
+	}
+
+	// 创建目标文件夹
+	destDir := f.GetFileDir(dest)
+	if !f.IsExists(destDir) {
+		f.CreateDir(destDir)
 	}
 
 	// 写入目标文件
 	err = ioutil.WriteFile(dest, srcFile, 0644)
 	if err != nil {
 		f.Log.Error("写入目标文件失败", "error", err, "dest", dest)
-		return err
+		return false
 	}
 
-	return nil
+	return true
 }
