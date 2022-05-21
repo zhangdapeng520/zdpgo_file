@@ -17,9 +17,9 @@ func TestFile_DeleteDirFile(t *testing.T) {
 		FileName string
 		Status   bool
 	}{
-		{"test", "a", true},
+		{"test", "a.txt", true},
 		{"test", "aa", false},
-		{"test", "b", true},
+		{"test", "b.txt", true},
 		{"test", "test11.txt", true},
 		{"test", "test22.txt", true},
 		{"test", "test33.txt", true},

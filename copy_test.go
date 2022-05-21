@@ -15,9 +15,9 @@ func TestFile_CopyFile(t *testing.T) {
 		Src  string
 		Dest string
 	}{
-		{"test/a", "test/test11.txt"},
-		{"test/a", "test/test22.txt"},
-		{"test/a", "test/test33.txt"},
+		{"test/a.txt", "test/test11.txt"},
+		{"test/a.txt", "test/test22.txt"},
+		{"test/a.txt", "test/test33.txt"},
 	}
 
 	for _, data := range testData {

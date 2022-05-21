@@ -26,7 +26,7 @@ func TestFile_IsDirContainsFile(t *testing.T) {
 		FileName string
 		Status   bool
 	}{
-		{"test", "a", true},
+		{"test", "a.txt", true},
 		{"test", "aa", false},
 		{"test", "test11.txt", true},
 		{"test", "test111.txt", false},

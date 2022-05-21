@@ -39,11 +39,11 @@ func TestFile_CreateDirFile(t *testing.T) {
 		Content  string
 		Status   bool
 	}{
-		{"test", "a", "aaa", true},
-		{"test", "b", "bbb", true},
+		{"test", "a.txt", "aaa", true},
+		{"test", "b.txt", "bbb", true},
 		{"test", "c", "ccc", true},
-		{"test111", "a", "aaa", false},
-		{"test111", "b", "bbb", false},
+		{"test111", "a.txt", "aaa", false},
+		{"test111", "b.txt", "bbb", false},
 		{"test111", "c", "ccc", false},
 	}
 

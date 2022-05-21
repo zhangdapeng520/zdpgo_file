@@ -74,6 +74,7 @@ func (f *File) RemoveDirFilesSuffix(dirPath string) error {
 	// 读取文件夹
 	files, err := ioutil.ReadDir(dirPath)
 	if err != nil {
+		f.Log.Error("读取文件夹失败", "error", err, "dirPath", dirPath)
 		return err
 	}
 
@@ -81,17 +82,37 @@ func (f *File) RemoveDirFilesSuffix(dirPath string) error {
 	for _, file := range files {
 		// 获取文件名
 		fileName := file.Name()
-		newName := strings.Split(fileName, ".")[0]
+		newName := f.GetFileName(fileName)
 
 		// 拼接文件夹
 		fileName = path.Join(dirPath, fileName)
+
+		// 如果是文件夹，递归移除
+		if f.IsDir(fileName) {
+			err = f.RemoveDirFilesSuffix(fileName)
+			if err != nil {
+				f.Log.Error("递归移除文件夹后缀失败", "error", err, "fileName", fileName)
+				return err
+			}
+			continue
+		}
+
+		if f.GetFileSuffix(fileName) == "" {
+			f.Log.Debug("该文件不包含后缀，跳过", "fileName", fileName)
+			continue
+		}
+
+		// 不是文件夹，则移除后缀
 		newName = path.Join(dirPath, newName)
 
 		// 重命名
-		err := os.Rename(fileName, newName)
+		err = os.Rename(fileName, newName)
 		if err != nil {
+			f.Log.Error("重命名文件失败", "error", err, "fileName", fileName, "newName", newName)
 			return err
 		}
+
+		f.Log.Debug("移除文件后缀成功", "fileName", fileName, "newName", newName)
 	}
 	return nil
 }

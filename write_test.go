@@ -13,7 +13,7 @@ import "testing"
 func TestFile_WriteCsv(t *testing.T) {
 	f := getFile()
 	data := [][]string{
-		{"a", "b", "c"},
+		{"a.txt", "b.txt", "c"},
 		{"111", "222", "333"},
 		{"111", "222", "333"},
 		{"111", "222", "333"},
