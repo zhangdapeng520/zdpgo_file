@@ -65,7 +65,7 @@ func (f *File) RemoveDirFilesSuffix(dirPath string) bool {
 	for _, file := range files {
 		// 获取文件名
 		fileName := file.Name()
-		newName := f.GetFileName(fileName)
+		newName := f.GetFileNameNoSuffix(fileName)
 
 		// 拼接文件夹
 		fileName = path.Join(dirPath, fileName)

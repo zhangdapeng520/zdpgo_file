@@ -4,6 +4,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 )
 
 /*
@@ -46,6 +47,14 @@ func (f *File) GetFileDir(absolutePath string) (fileDir string) {
 // GetFileName 获取文件名称
 func (f *File) GetFileName(absolutePath string) (fileName string) {
 	fileName = filepath.Base(absolutePath)
+	return
+}
+
+// GetFileNameNoSuffix 获取文件名称，不包含后缀
+func (f *File) GetFileNameNoSuffix(absolutePath string) (fileName string) {
+	fileName = filepath.Base(absolutePath)
+	suffix := f.GetFileSuffix(fileName)
+	fileName = strings.Replace(fileName, suffix, "", 1)
 	return
 }
 

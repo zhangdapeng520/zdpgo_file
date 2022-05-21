@@ -14,5 +14,5 @@ import (
 
 func RenameDirFilesName(f *zdpgo_file.File) {
 	b := f.ReplaceDirFilesName("./test", "[test]", "")
-	f.Log.Debug("移除文件夹中所有文件的后缀", b)
+	f.Log.Debug("重命名文件夹中所有文件", b)
 }
