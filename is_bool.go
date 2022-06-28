@@ -29,7 +29,6 @@ func (f *File) IsExists(path string) bool {
 func (f *File) IsDirContainsFile(dirPath, fileName string) bool {
 	dirList, err := ioutil.ReadDir(dirPath)
 	if err != nil {
-		f.Log.Error("读取文件夹失败", "error", err, "dirPath", dirPath)
 		return false
 	}
 
@@ -47,7 +46,6 @@ func (f *File) IsDirContainsFile(dirPath, fileName string) bool {
 func (f *File) IsDir(dirPath string) bool {
 	s, err := os.Stat(dirPath)
 	if err != nil {
-		f.Log.Error("打开文件失败", "error", err)
 		return false
 	}
 	return s.IsDir()

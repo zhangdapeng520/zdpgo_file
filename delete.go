@@ -21,7 +21,6 @@ func (f *File) DeleteDirFile(dirPath, fileName string) bool {
 	// 删除文件
 	err := os.Remove(filePath) //删除文件test.txt
 	if err != nil {
-		f.Log.Error("删除指定目录中的指定文件失败", "error", err, "dirPath", dirPath, "fileName", fileName)
 		return false
 	}
 	return true
@@ -31,7 +30,6 @@ func (f *File) DeleteDirFile(dirPath, fileName string) bool {
 func (f *File) DeleteDir(dirPath string) bool {
 	err := os.RemoveAll(dirPath)
 	if err != nil {
-		f.Log.Error("删除文件夹失败", "error", err, "dirPath", dirPath)
 		return false
 	}
 	return true

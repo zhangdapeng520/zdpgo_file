@@ -17,7 +17,6 @@ func (f *File) CopyFile(src, dest string) bool {
 	// 读取源文件
 	srcFile, err := ioutil.ReadFile(src)
 	if err != nil {
-		f.Log.Error("读取源文件失败", "error", err, "src", src)
 		return false
 	}
 
@@ -30,7 +29,6 @@ func (f *File) CopyFile(src, dest string) bool {
 	// 写入目标文件
 	err = ioutil.WriteFile(dest, srcFile, 0644)
 	if err != nil {
-		f.Log.Error("写入目标文件失败", "error", err, "dest", dest)
 		return false
 	}
 

@@ -16,7 +16,8 @@ import (
 */
 
 // GetDirSize 文件夹占用磁盘大小
-func (f *File) GetDirSize(path string) (size int64) {
+func (f *File) GetDirSize(path string) (int64, error) {
+	var size int64
 	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -27,9 +28,9 @@ func (f *File) GetDirSize(path string) (size int64) {
 		return err
 	})
 	if err != nil {
-		f.Log.Error("获取文件夹大小失败", "error", err, "dirPath", path)
+		return 0, err
 	}
-	return
+	return size, nil
 }
 
 // GetFileDirAndFileName 获取文件路径和文件名

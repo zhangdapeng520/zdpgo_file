@@ -19,7 +19,6 @@ func (f *File) CreateDir(dirtPath string) bool {
 	if !f.IsExists(dirtPath) {
 		err := os.MkdirAll(dirtPath, os.ModePerm)
 		if err != nil {
-			f.Log.Error("创建文件夹失败", "error", err, "dirPath", dirtPath)
 			return false
 		}
 	}
@@ -39,7 +38,6 @@ func (f *File) CreateDirFile(dirtPath, fileName, content string) bool {
 	// 写入数据
 	err := ioutil.WriteFile(filePath, []byte(content), os.ModePerm)
 	if err != nil {
-		f.Log.Error("写入数据到文件失败", "error", err, "filePath", filePath)
 		return false
 	}
 
@@ -57,7 +55,6 @@ func (f *File) CreateFile(filePath, content string) bool {
 	// 创建文件
 	err := ioutil.WriteFile(filePath, []byte(content), os.ModePerm)
 	if err != nil {
-		f.Log.Error("写入数据到文件失败", "error", err, "filePath", filePath)
 		return false
 	}
 	return true

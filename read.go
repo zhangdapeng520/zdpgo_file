@@ -20,7 +20,6 @@ func (f *File) ReadCsv(fileName string) (data [][]string, err error) {
 	// 打开文件
 	csvFile, err := os.Open(fileName)
 	if err != nil {
-		f.Log.Error("打开CSV文件失败", "error", err)
 		return
 	}
 	defer csvFile.Close()
@@ -36,7 +35,6 @@ func (f *File) ReadCsv(fileName string) (data [][]string, err error) {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			f.Log.Error("读取CSV文件失败", "error", err)
 			return
 		}
 
