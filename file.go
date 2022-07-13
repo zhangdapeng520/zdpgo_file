@@ -118,3 +118,27 @@ func (f *File) ReplaceDirFilesName(dirPath string, oldStr, newStr string) bool {
 	}
 	return true
 }
+
+// ReplaceDirName 替换文件夹名
+func (f *File) ReplaceDirName(dirPath string, oldStr, newStr string) bool {
+	// 读取文件夹
+	files, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		return false
+	}
+
+	// 遍历修改文件
+	for _, file := range files {
+		// 获取文件名
+		fileName := file.Name()
+		newName := strings.Replace(fileName, oldStr, newStr, 1)
+
+		// 重命名文件夹
+		fileName = path.Join(dirPath, fileName)
+		newName = path.Join(dirPath, newName)
+		if f.IsDir(fileName) {
+			os.Rename(fileName, newName)
+		}
+	}
+	return true
+}
